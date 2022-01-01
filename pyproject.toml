@@ -1,0 +1,44 @@
+[tool.poetry]
+name = "pyqt_drawer"
+version = "0.1.0"
+description = "Drawer and NavigationBar widgets for PyQt6 developers."
+authors = ["dhzdhd"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+PyQt6 = "^6.2.2"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^4.0.1"
+black = "^21.12b0"
+flake8-annotations = "^2.7.0"
+flake8-bugbear = "^21.11.29"
+flake8-docstrings = "^1.6.0"
+flake8-string-format = "^0.3.0"
+flake8-tidy-imports = "^4.5.0"
+flake8-todo = "^0.7"
+flake8-isort = "^4.1.1"
+pep8-naming = "^0.12.1"
+pre-commit = "^2.16.0"
+taskipy = "^1.9.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tools.taskipy.tasks]
+drawer_example = "python drawer_example.py"
+navbar_example = "python navbar_example.py"
+lint = "pre-commit run --all-files"
+precommit = "pre-commit install"
+isort = "isort ."
+
+[tool.isort]
+multi_line_output = 6
+order_by_type = false
+case_sensitive = true
+combine_as_imports = true
+line_length = 120
+atomic = true
+
