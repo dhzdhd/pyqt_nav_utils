@@ -1,20 +1,13 @@
 from __future__ import annotations
 
-from PyQt6.QtCore import QPropertyAnimation, QPoint, QEasingCurve, pyqtProperty, QSequentialAnimationGroup
-from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import (
-    QWidget,
-    QLayout,
-    QFrame,
-    QStackedWidget,
-    QHBoxLayout,
-    QSizePolicy,
-    QAbstractButton,
-)
+from PyQt6.QtCore import QEasingCurve, QPoint, QPropertyAnimation, QSequentialAnimationGroup
+from PyQt6.QtWidgets import QAbstractButton, QHBoxLayout, QSizePolicy, QWidget
 
 
 class NavigationBar(QWidget):
-    def __init__(self, parent, height: int, *args: QAbstractButton) -> None:
+    """An animated NavigationBar widget"""
+
+    def __init__(self, parent: QWidget, height: int, *args: QAbstractButton) -> None:
         super().__init__(parent)
 
         assert height >= 50, "NavigationBar height cannot be lesser than 50."
@@ -47,19 +40,19 @@ class NavigationBar(QWidget):
         for i in self._args:
             i.clicked.connect(lambda: self._animate(i))
 
-    def _animate(self, i) -> None:
-        i.setDisabled(True)
+    def _animate(self, widget: QAbstractButton) -> None:
+        widget.setDisabled(True)
 
-        self._anim1 = QPropertyAnimation(i, b"pos")
+        self._anim1 = QPropertyAnimation(widget, b"pos")
         self._anim1.setDuration(100)
         self._anim1.setEasingCurve(QEasingCurve.Type.BezierSpline)
-        self._anim1.setStartValue(QPoint(i.x(), i.y()))
-        self._anim1.setEndValue(QPoint(i.x(), i.y() - 10))
+        self._anim1.setStartValue(QPoint(widget.x(), widget.y()))
+        self._anim1.setEndValue(QPoint(widget.x(), widget.y() - 10))
 
-        self._anim2 = QPropertyAnimation(i, b"pos")
+        self._anim2 = QPropertyAnimation(widget, b"pos")
         self._anim2.setDuration(100)
-        self._anim2.setStartValue(QPoint(i.x(), i.y() - 10))
-        self._anim2.setEndValue(QPoint(i.x(), i.y()))
+        self._anim2.setStartValue(QPoint(widget.x(), widget.y() - 10))
+        self._anim2.setEndValue(QPoint(widget.x(), widget.y()))
 
         self._anim_group = QSequentialAnimationGroup()
         self._anim_group.addAnimation(self._anim1)
@@ -67,4 +60,4 @@ class NavigationBar(QWidget):
 
         self._anim_group.start()
 
-        i.setDisabled(False)
+        widget.setDisabled(False)

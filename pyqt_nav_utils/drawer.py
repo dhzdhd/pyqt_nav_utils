@@ -1,26 +1,19 @@
+"""Animated Drawer and DraggableDrawer widget."""
+
 from __future__ import annotations
 
-from PyQt6.QtCore import QPropertyAnimation, Qt
+from PyQt6.QtCore import QPropertyAnimation
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import (
-    QWidget,
-    QLayout,
-    QFrame,
-    QSplitter,
-    QVBoxLayout,
-    QSizePolicy,
-    QPushButton,
-)
+from PyQt6.QtWidgets import QLayout, QPushButton, QSizePolicy, QSplitter, QVBoxLayout, QWidget
 
 
 class Drawer(QWidget):
-    """
-    An animated Drawer widget
-    """
+    """An animated Drawer widget."""
 
     def __init__(
         self, parent: QWidget, drawer_width: int, expanded_width: int | None = None
     ) -> None:
+        """Initialise variables and add assertions."""
         super().__init__(parent)
 
         assert drawer_width >= 50, "Drawer width cannot be lesser than 50."
@@ -40,6 +33,7 @@ class Drawer(QWidget):
 
     @property
     def is_expanded(self) -> bool:
+        """A getter to check if Drawer is expanded or not."""
         return self._is_expanded
 
     def _init_widgets(self) -> None:
@@ -96,6 +90,7 @@ class Drawer(QWidget):
 class DraggableDrawer(Drawer):
     """
     A draggable animated Drawer widget.
+
     To be used with QWidgets.QSplitter as the parent widget.
     """
 
