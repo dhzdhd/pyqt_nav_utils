@@ -30,9 +30,19 @@ class Drawer(QWidget):
 
         self._drawer_width = drawer_width
         self._expanded_width = expanded_width
+        self._is_expanded = False
         self._layout = QVBoxLayout(self)
         self._menu_button = QPushButton(self)
 
+        self._init_widgets()
+        self._add_to_layout()
+        self._add_functionality()
+
+    @property
+    def is_expanded(self) -> bool:
+        return self._is_expanded
+
+    def _init_widgets(self) -> None:
         self.setMinimumWidth(self._drawer_width)
         self.setMaximumWidth(self._drawer_width)
         self.setGeometry(0, 0, self._drawer_width, self.parentWidget().height())
@@ -42,19 +52,6 @@ class Drawer(QWidget):
             )
         )
 
-        self._add_widgets()
-        self._add_to_layout()
-        self._add_functionality()
-
-    @property
-    def drawer_width(self) -> int:
-        return self._drawer_width
-
-    @property
-    def expanded_width(self) -> int:
-        return self._expanded_width
-
-    def _add_widgets(self) -> None:
         self._menu_button.setText("≡")
         self._menu_button.setFont(QFont("", 20, 10))
         self._menu_button.setStyleSheet(
@@ -91,6 +88,8 @@ class Drawer(QWidget):
             self._anim.setEndValue(self._drawer_width)
         else:
             self._anim.setEndValue(self._expanded_width)
+
+        self._is_expanded = not self._is_expanded
         self._anim.start()
 
 
@@ -105,9 +104,11 @@ class DraggableDrawer(Drawer):
     ):
         super().__init__(parent, drawer_width, expanded_width)
 
-        self.setMaximumWidth(self.drawer_width)
+        assert (
+            self.parentWidget() == QSplitter
+        ), "Intended to be used with a parent QtWidgets.QSplitter widget only"
+
+        self.setMaximumWidth(drawer_width)
         self.setSizePolicy(
-            QSizePolicy(
-                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
-            )
+            QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         )
