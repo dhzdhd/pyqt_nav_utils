@@ -21,7 +21,7 @@ class Window(qtw.QDialog):
         self.content_frame.setStyleSheet("""background-color: rgb(230, 230, 230)""")
         self.content_frame.setSizePolicy(
             qtw.QSizePolicy(
-                qtw.QSizePolicy.Policy.MinimumExpanding,
+                qtw.QSizePolicy.Policy.Expanding,
                 qtw.QSizePolicy.Policy.Preferred,
             )
         )
@@ -29,7 +29,6 @@ class Window(qtw.QDialog):
         self.button_list = [qtw.QPushButton(f"{_}") for _ in range(5)]
 
         self.drawer = qtd.Drawer(self.main_frame, 50, 1000)
-        self.drawer.layout().setAlignment(qtc.Qt.AlignmentFlag.AlignTop)
 
     def set_layout(self) -> None:
         self.main_layout = qtw.QVBoxLayout(self)
@@ -39,6 +38,8 @@ class Window(qtw.QDialog):
         self.main_frame_layout = qtw.QHBoxLayout(self.main_frame)
         self.main_frame_layout.setContentsMargins(0, 0, 0, 0)
         self.main_frame_layout.setSpacing(0)
+
+        self.drawer.layout().setAlignment(qtc.Qt.AlignmentFlag.AlignTop)
 
         self.content_frame_layout = qtw.QHBoxLayout(self.content_frame)
         for i in self.button_list:

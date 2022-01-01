@@ -1,24 +1,16 @@
 from __future__ import annotations
 
-from PyQt6.QtCore import QPropertyAnimation
+from PyQt6.QtCore import QPropertyAnimation, Qt
 from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import (
     QWidget,
     QLayout,
     QFrame,
-    QStackedWidget,
+    QSplitter,
     QVBoxLayout,
     QSizePolicy,
     QPushButton,
 )
-
-
-class StackedDrawer(QStackedWidget):
-    def __init__(
-        self, parent: QWidget | QLayout, drawer_width: int, expanded_width: int
-    ):
-        super().__init__(parent)
-        self.addWidget(Drawer(parent, drawer_width, expanded_width))
 
 
 class Drawer(QWidget):
@@ -39,7 +31,6 @@ class Drawer(QWidget):
         self._drawer_width = drawer_width
         self._expanded_width = expanded_width
         self._layout = QVBoxLayout(self)
-        self._layout.setContentsMargins(0, 0, 0, 0)
         self._menu_button = QPushButton(self)
 
         self.setMinimumWidth(self._drawer_width)
@@ -84,6 +75,7 @@ class Drawer(QWidget):
         )
 
     def _add_to_layout(self) -> None:
+        self._layout.setContentsMargins(0, 0, 0, 0)
         self._layout.addWidget(self._menu_button)
 
         self.setLayout(self._layout)
@@ -93,10 +85,29 @@ class Drawer(QWidget):
 
     def _add_animation(self) -> None:
         self._anim = QPropertyAnimation(self, b"maximumWidth")
-        self._anim.setDuration(100)
+        self._anim.setDuration(300)
 
         if self.maximumWidth() == self._expanded_width:
             self._anim.setEndValue(self._drawer_width)
         else:
             self._anim.setEndValue(self._expanded_width)
         self._anim.start()
+
+
+class DraggableDrawer(Drawer):
+    """
+    A draggable animated Drawer widget.
+    To be used with QWidgets.QSplitter as the parent widget.
+    """
+
+    def __init__(
+        self, parent: QWidget | QLayout, drawer_width: int, expanded_width: int
+    ):
+        super().__init__(parent, drawer_width, expanded_width)
+
+        self.setMaximumWidth(self.drawer_width)
+        self.setSizePolicy(
+            QSizePolicy(
+                QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred
+            )
+        )
