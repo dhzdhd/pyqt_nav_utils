@@ -96,7 +96,7 @@ class DraggableDrawer(Drawer):
 
     def __init__(
         self, parent: QWidget | QLayout, drawer_width: int, expanded_width: int
-    ):
+    ) -> None:
         super().__init__(parent, drawer_width, expanded_width)
 
         assert (

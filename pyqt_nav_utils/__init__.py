@@ -2,6 +2,6 @@
 
 
 from pyqt_nav_utils.drawer import DraggableDrawer, Drawer
-from pyqt_nav_utils.navbar import NavigationBar
+from pyqt_nav_utils.navbar import NavigationBar, NavigationBarItem
 
-__all__ = ["Drawer", "DraggableDrawer", "NavigationBar"]
+__all__ = ["Drawer", "DraggableDrawer", "NavigationBar", "NavigationBarItem"]
