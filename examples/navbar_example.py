@@ -1,6 +1,7 @@
 import pyqt_nav_utils as qtu
 import PyQt6.QtCore as qtc
 import PyQt6.QtWidgets as qtw
+import PyQt6.QtGui as qtg
 import sys
 
 
@@ -12,11 +13,13 @@ class Window(qtw.QDialog):
 
         self.main_frame = qtw.QFrame(self)
         self.content_frame = qtw.QFrame(self.main_frame)
-        # self.button_list = [qtu.NavigationBarItem(f"{_}") for _ in range(5)]
         self.navbar = qtu.NavigationBar(self.main_frame, 50, 0)
         self.navbar.add_item(qtu.NavigationBarItem("Home"))
         self.navbar.add_item(qtu.NavigationBarItem("Maps"))
-        self.navbar.add_item(qtu.NavigationBarItem("Settings"))
+        self.navbar.add_item(qtu.NavigationBarItem(
+            "Settings",
+            pixmap=self.style().standardIcon(qtw.QStyle.StandardPixmap.SP_MediaPlay).pixmap(qtc.QSize(10, 10)),
+        ))
 
         self.main_layout = qtw.QVBoxLayout(self)
         self.main_frame_layout = qtw.QVBoxLayout(self.main_frame)

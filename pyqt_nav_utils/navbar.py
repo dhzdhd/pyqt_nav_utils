@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import QEasingCurve, QPoint, QPropertyAnimation, QSequentialAnimationGroup, Qt
 from PyQt6.QtWidgets import QAbstractButton, QHBoxLayout, QSizePolicy, QFrame, QStackedLayout, QWidget, QSpacerItem, QLabel, QRadioButton, QVBoxLayout, QPushButton
 
@@ -57,24 +57,26 @@ class NavigationBar(QWidget):
 
 
 class NavigationBarItem(QWidget):
-    def __init__(self, text: str | None = None, icon: QIcon | None = None) -> None:
+    def __init__(self, text: str | None = None, pixmap: QPixmap | None = None) -> None:
         super().__init__()
 
         # assert icon is not None and text is not None, "Text, icon or both have to be supplied to the widget."
 
         # self.setFixedWidth(50)
+        self._pixmap = pixmap
         self._stack = QStackedLayout(self)
         self._content_frame = QFrame()
         self._content_layout = QVBoxLayout()
         self._button = QPushButton()
         self._label = QLabel(text)
-        self._icon = icon
+        self._icon = QLabel()
 
         self._init_widgets()
         self._add_to_layout()
         self._add_functionality()
 
     def _init_widgets(self) -> None:
+        self._icon.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self._button.setStyleSheet(
             """
             QPushButton {
@@ -90,7 +92,8 @@ class NavigationBarItem(QWidget):
         )
 
     def _add_to_layout(self) -> None:
-        if self._icon is not None:
+        if self._pixmap is not None:
+            self._icon.setPixmap(self._pixmap)
             self._content_layout.addWidget(self._icon)
 
         if self._label is not None:
