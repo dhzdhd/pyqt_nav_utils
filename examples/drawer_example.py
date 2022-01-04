@@ -1,7 +1,9 @@
-import pyqt_nav_utils as qtd
+import sys
+
 import PyQt6.QtCore as qtc
 import PyQt6.QtWidgets as qtw
-import sys
+
+import pyqt_nav_utils as qtd
 
 
 class Window(qtw.QDialog):

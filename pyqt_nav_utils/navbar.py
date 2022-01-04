@@ -1,8 +1,10 @@
 from __future__ import annotations
 
-from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtCore import QEasingCurve, QPoint, QPropertyAnimation, QSequentialAnimationGroup, Qt
-from PyQt6.QtWidgets import QAbstractButton, QHBoxLayout, QSizePolicy, QFrame, QStackedLayout, QWidget, QSpacerItem, QLabel, QRadioButton, QVBoxLayout, QPushButton
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtWidgets import (
+    QAbstractButton, QFrame, QHBoxLayout, QLabel, QPushButton, QStackedLayout, QVBoxLayout, QWidget
+)
 
 
 class NavigationBar(QWidget):
@@ -26,15 +28,14 @@ class NavigationBar(QWidget):
 
     def add_item(self, item: NavigationBarItem) -> None:
         self._items.append(item)
+        print(self._items)
         self._layout.addWidget(item)
-        self._layout.addSpacerItem(QSpacerItem(0, 0, hPolicy=QSizePolicy.Policy.MinimumExpanding))
 
     def _init_widgets(self) -> None:
         self.setFixedHeight(self._height)
 
     def _add_to_layout(self) -> None:
         self._layout.setContentsMargins(0, 0, 0, 0)
-        self._layout.addSpacerItem(QSpacerItem(0, 0, hPolicy=QSizePolicy.Policy.MinimumExpanding))
         self.setLayout(self._layout)
 
     def _animate(self, widget: QAbstractButton) -> None:
@@ -62,7 +63,7 @@ class NavigationBarItem(QWidget):
 
         # assert icon is not None and text is not None, "Text, icon or both have to be supplied to the widget."
 
-        # self.setFixedWidth(50)
+        self._text = text
         self._pixmap = pixmap
         self._stack = QStackedLayout(self)
         self._content_frame = QFrame()
@@ -75,6 +76,10 @@ class NavigationBarItem(QWidget):
         self._add_to_layout()
         self._add_functionality()
 
+    @property
+    def get_button(self) -> QPushButton:
+        return self._button
+
     def _init_widgets(self) -> None:
         self._icon.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self._button.setStyleSheet(
@@ -84,7 +89,7 @@ class NavigationBarItem(QWidget):
                 color: transparent;
                 border: none;
             }
-            
+
             QPushButton::hover {
                 background-color: rgba(230, 230, 230, 70);
             }
@@ -95,9 +100,13 @@ class NavigationBarItem(QWidget):
         if self._pixmap is not None:
             self._icon.setPixmap(self._pixmap)
             self._content_layout.addWidget(self._icon)
+        else:
+            self._icon.destroy()
 
-        if self._label is not None:
+        if self._text is not None:
             self._content_layout.addWidget(self._label)
+        else:
+            self._label.destroy()
 
         self._content_layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self._content_frame.setLayout(self._content_layout)
@@ -112,18 +121,16 @@ class NavigationBarItem(QWidget):
     def _add_functionality(self) -> None:
         self._button.clicked.connect(lambda: self._add_animation())
 
-    def _add_animation(self):
-        self._label.setStyleSheet("color: blue;")
-
+    def _add_animation(self) -> None:
         self._anim1 = QPropertyAnimation(self, b"pos")
         self._anim1.setDuration(100)
         self._anim1.setEasingCurve(QEasingCurve.Type.BezierSpline)
         self._anim1.setStartValue(QPoint(self.x(), self.y()))
-        self._anim1.setEndValue(QPoint(self.x(), self.y() - 10))
+        self._anim1.setEndValue(QPoint(self.x(), self.y() - 5))
 
         self._anim2 = QPropertyAnimation(self, b"pos")
         self._anim2.setDuration(100)
-        self._anim2.setStartValue(QPoint(self.x(), self.y() - 10))
+        self._anim2.setStartValue(QPoint(self.x(), self.y() - 5))
         self._anim2.setEndValue(QPoint(self.x(), self.y()))
 
         self._anim_group = QSequentialAnimationGroup()
