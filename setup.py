@@ -9,9 +9,9 @@ with open(os.path.join(os.path.dirname(__file__), "README.md")) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name="pyqt_nav_utils",
+    name="pyqtnavutils",
     version="0.1.0",
-    packages=["pyqt_nav_utils"],
+    packages=["pyqtnavutils"],
     author="dhzdhd",
     # author_email='yencardonaal@unal.edu.co',
     maintainer="dhzdhd",

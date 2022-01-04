@@ -1,83 +1,83 @@
 import sys
 
-import PyQt6.QtCore as qtc
-import PyQt6.QtGui as qtg
-import PyQt6.QtWidgets as qtw
+from PyQt6.QtCore import QSize
+from PyQt6.QtGui import QFont
+from PyQt6.QtWidgets import QApplication, QDialog, QFrame, QPushButton, QStackedWidget, QStyle, QVBoxLayout
 
-import pyqt_nav_utils as qtu
+from pyqtnavutils import NavigationBar, NavigationBarItem
 
 
-class Window(qtw.QDialog):
+class Window(QDialog):
     def __init__(self) -> None:
         super().__init__()
         self.setWindowTitle("Example")
         self.setGeometry(1000, 1000, 2000, 500)
 
-        self.main_frame = qtw.QFrame(self)
-        self.stacked_widget = qtw.QStackedWidget(self.main_frame)
-        self.navbar = qtu.NavigationBar(self.main_frame, 50, 0)
-        self.navbar.add_item(qtu.NavigationBarItem("Home"))
-        self.navbar.add_item(
-            qtu.NavigationBarItem(
+        self.mainFrame = QFrame(self)
+        self.stackedWidget = QStackedWidget(self.mainFrame)
+        self.navbar = NavigationBar(self.mainFrame, 50)
+        self.navbar.addItem(NavigationBarItem("Home"))
+        self.navbar.addItem(
+            NavigationBarItem(
                 pixmap=self.style()
-                .standardIcon(qtw.QStyle.StandardPixmap.SP_DirIcon)
-                .pixmap(qtc.QSize(30, 30))
+                .standardIcon(QStyle.StandardPixmap.SP_DirIcon)
+                .pixmap(QSize(30, 30))
             )
         )
-        self.navbar.add_item(
-            qtu.NavigationBarItem(
+        self.navbar.addItem(
+            NavigationBarItem(
                 "Settings",
                 pixmap=self.style()
-                .standardIcon(qtw.QStyle.StandardPixmap.SP_MediaPlay)
-                .pixmap(qtc.QSize(10, 10)),
+                .standardIcon(QStyle.StandardPixmap.SP_MediaPlay)
+                .pixmap(QSize(10, 10)),
             )
         )
 
-        self.main_layout = qtw.QVBoxLayout(self)
-        self.main_frame_layout = qtw.QVBoxLayout(self.main_frame)
+        self.mainLayout = QVBoxLayout(self)
+        self.mainFrameLayout = QVBoxLayout(self.mainFrame)
 
-        self.init_widgets()
-        self.set_layout()
-        self.add_to_layout()
+        self.initWidgets()
+        self.initLayout()
+        self.addToLayout()
 
-    def init_widgets(self) -> None:
-        self.stacked_widget.setStyleSheet("""background-color: rgb(230, 230, 230)""")
-        self.stacked_widget.setContentsMargins(10, 10, 10, 10)
+    def initWidgets(self) -> None:
+        self.stackedWidget.setStyleSheet("""background-color: rgb(230, 230, 230)""")
+        self.stackedWidget.setContentsMargins(10, 10, 10, 10)
 
         for _ in range(3):
-            button = qtw.QPushButton(f"{_}")
-            button.setFont(qtg.QFont([], 100))
-            self.stacked_widget.addWidget(button)
-        self.stacked_widget.setCurrentIndex(0)
+            button = QPushButton(f"{_}")
+            button.setFont(QFont([], 100))
+            self.stackedWidget.addWidget(button)
+        self.stackedWidget.setCurrentIndex(0)
 
-        self.navbar._items[0]._button.clicked.connect(
-            lambda: self.stacked_widget.setCurrentIndex(0)
+        self.navbar.getItems[0].getButton.clicked.connect(
+            lambda: self.stackedWidget.setCurrentIndex(0)
         )
-        self.navbar._items[1]._button.clicked.connect(
-            lambda: self.stacked_widget.setCurrentIndex(1)
+        self.navbar.getItems[1].getButton.clicked.connect(
+            lambda: self.stackedWidget.setCurrentIndex(1)
         )
-        self.navbar._items[2]._button.clicked.connect(
-            lambda: self.stacked_widget.setCurrentIndex(2)
+        self.navbar.getItems[2].getButton.clicked.connect(
+            lambda: self.stackedWidget.setCurrentIndex(2)
         )
 
-    def set_layout(self) -> None:
-        self.main_layout.setContentsMargins(0, 0, 0, 0)
-        self.main_layout.setSpacing(0)
+    def initLayout(self) -> None:
+        self.mainLayout.setContentsMargins(0, 0, 0, 0)
+        self.mainLayout.setSpacing(0)
 
-        self.main_frame_layout.setContentsMargins(0, 0, 0, 0)
-        self.main_frame_layout.setSpacing(0)
+        self.mainFrameLayout.setContentsMargins(0, 0, 0, 0)
+        self.mainFrameLayout.setSpacing(0)
 
-    def add_to_layout(self) -> None:
-        self.main_layout.addWidget(self.main_frame)
+    def addToLayout(self) -> None:
+        self.mainLayout.addWidget(self.mainFrame)
 
-        self.main_frame_layout.addWidget(self.stacked_widget)
-        self.main_frame_layout.addWidget(self.navbar)
+        self.mainFrameLayout.addWidget(self.stackedWidget)
+        self.mainFrameLayout.addWidget(self.navbar)
 
-        self.setLayout(self.main_layout)
+        self.setLayout(self.mainLayout)
 
 
 if __name__ == "__main__":
-    app = qtw.QApplication([])
+    app = QApplication([])
     window = Window()
     window.show()
     sys.exit(app.exec())

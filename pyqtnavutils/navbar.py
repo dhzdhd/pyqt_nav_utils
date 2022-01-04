@@ -8,9 +8,13 @@ from PyQt6.QtWidgets import (
 
 
 class NavigationBar(QWidget):
-    """An animated NavigationBar widget"""
+    def __init__(self, parent: QWidget, height: int) -> None:
+        """
 
-    def __init__(self, parent: QWidget, height: int, default: int) -> None:
+        :param parent:
+        :param height:
+        """
+
         super().__init__(parent)
 
         assert height >= 50, "NavigationBar height cannot be lesser than 50."
@@ -19,22 +23,31 @@ class NavigationBar(QWidget):
         self._items = []
         self._layout = QHBoxLayout(self)
 
-        self._init_widgets()
-        self._add_to_layout()
+        self._initWidgets()
+        self._addToLayout()
 
     @property
-    def get_items(self) -> list[NavigationBarItem]:
+    def getItems(self) -> list[NavigationBarItem]:
+        """
+
+        :return:
+        """
+
         return self._items
 
-    def add_item(self, item: NavigationBarItem) -> None:
+    def addItem(self, item: NavigationBarItem) -> None:
+        """
+
+        :param item:
+        """
+
         self._items.append(item)
-        print(self._items)
         self._layout.addWidget(item)
 
-    def _init_widgets(self) -> None:
+    def _initWidgets(self) -> None:
         self.setFixedHeight(self._height)
 
-    def _add_to_layout(self) -> None:
+    def _addToLayout(self) -> None:
         self._layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self._layout)
 
@@ -50,15 +63,21 @@ class NavigationBar(QWidget):
         self._anim2.setStartValue(QPoint(widget.x(), widget.y() - 10))
         self._anim2.setEndValue(QPoint(widget.x(), widget.y()))
 
-        self._anim_group = QSequentialAnimationGroup()
-        self._anim_group.addAnimation(self._anim1)
-        self._anim_group.addAnimation(self._anim2)
+        self._animGroup = QSequentialAnimationGroup()
+        self._animGroup.addAnimation(self._anim1)
+        self._animGroup.addAnimation(self._anim2)
 
-        self._anim_group.start()
+        self._animGroup.start()
 
 
 class NavigationBarItem(QWidget):
     def __init__(self, text: str | None = None, pixmap: QPixmap | None = None) -> None:
+        """
+
+        :param text:
+        :param pixmap:
+        """
+
         super().__init__()
 
         # assert icon is not None and text is not None, "Text, icon or both have to be supplied to the widget."
@@ -66,21 +85,26 @@ class NavigationBarItem(QWidget):
         self._text = text
         self._pixmap = pixmap
         self._stack = QStackedLayout(self)
-        self._content_frame = QFrame()
-        self._content_layout = QVBoxLayout()
+        self._contentFrame = QFrame()
+        self._contentLayout = QVBoxLayout()
         self._button = QPushButton()
         self._label = QLabel(text)
         self._icon = QLabel()
 
-        self._init_widgets()
-        self._add_to_layout()
-        self._add_functionality()
+        self._initWidgets()
+        self._addToLayout()
+        self._addFunctionality()
 
     @property
-    def get_button(self) -> QPushButton:
+    def getButton(self) -> QPushButton:
+        """
+
+        :return:
+        """
+
         return self._button
 
-    def _init_widgets(self) -> None:
+    def _initWidgets(self) -> None:
         self._icon.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self._button.setStyleSheet(
             """
@@ -96,32 +120,32 @@ class NavigationBarItem(QWidget):
             """
         )
 
-    def _add_to_layout(self) -> None:
+    def _addToLayout(self) -> None:
         if self._pixmap is not None:
             self._icon.setPixmap(self._pixmap)
-            self._content_layout.addWidget(self._icon)
+            self._contentLayout.addWidget(self._icon)
         else:
             self._icon.destroy()
 
         if self._text is not None:
-            self._content_layout.addWidget(self._label)
+            self._contentLayout.addWidget(self._label)
         else:
             self._label.destroy()
 
-        self._content_layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
-        self._content_frame.setLayout(self._content_layout)
+        self._contentLayout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self._contentFrame.setLayout(self._contentLayout)
 
         self._stack.setContentsMargins(0, 0, 0, 0)
         self._stack.setStackingMode(QStackedLayout.StackingMode.StackAll)
         self._stack.addWidget(self._button)
-        self._stack.addWidget(self._content_frame)
+        self._stack.addWidget(self._contentFrame)
 
         self.setLayout(self._stack)
 
-    def _add_functionality(self) -> None:
-        self._button.clicked.connect(lambda: self._add_animation())
+    def _addFunctionality(self) -> None:
+        self._button.clicked.connect(lambda: self._animate())
 
-    def _add_animation(self) -> None:
+    def _animate(self) -> None:
         self._anim1 = QPropertyAnimation(self, b"pos")
         self._anim1.setDuration(100)
         self._anim1.setEasingCurve(QEasingCurve.Type.BezierSpline)
@@ -133,8 +157,8 @@ class NavigationBarItem(QWidget):
         self._anim2.setStartValue(QPoint(self.x(), self.y() - 5))
         self._anim2.setEndValue(QPoint(self.x(), self.y()))
 
-        self._anim_group = QSequentialAnimationGroup()
-        self._anim_group.addAnimation(self._anim1)
-        self._anim_group.addAnimation(self._anim2)
+        self._animGroup = QSequentialAnimationGroup()
+        self._animGroup.addAnimation(self._anim1)
+        self._animGroup.addAnimation(self._anim2)
 
-        self._anim_group.start()
+        self._animGroup.start()
