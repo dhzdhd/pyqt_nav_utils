@@ -12,4 +12,4 @@ Look at the `examples/` folder for examples of each widget.
 
 ## Contributing
 Contributions are welcome.<br>
-Refer to `CONTRIBUTING.md` and read `CODE_OF_CONDUCT.md`
+Refer to `CONTRIBUTING.md` and read `CODE_OF_CONDUCT.md` 
